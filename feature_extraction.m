@@ -29,7 +29,7 @@ function [A,B] = feature_extraction()
             file = load(filename);
             
             %Imprimindo dados brutos
-            plot_signals(file, folder, i, 'Raw');
+            plot_signals(file, files(i).name, folder{1}(1), i, 'Raw');
         end
     end
     
@@ -37,14 +37,14 @@ function [A,B] = feature_extraction()
     B = 2;
 end
 
-function plot_signals(file, folder, index, export_type)
+function plot_signals(file, filebasename, folder, index, export_type)
     f = figure('visible', 'off');
     plot(1:length(file),file);
-    %TODO: Update labels
-    xlabel('Sample');
-    ylabel('Amplitude Value');
-    str_title = [export_type ' EEG - Dataset ' folder{1} ' - Channel ' int2str(index)];
+    xlim([0 length(file)])
+    xlabel('Amostra');
+    ylabel('Amplitude (mV)');
+    str_title = [export_type ' EEG - Dataset ' folder ' - Channel ' int2str(index)];
     title(str_title);
-    saveas(f,['plots/' export_type '/' files(index).name '.png']);
+    saveas(f,['plots/' export_type '/' filebasename '.png']);
     close(f);
 end
