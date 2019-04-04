@@ -16,24 +16,37 @@ function [A,B] = feature_extraction()
     base_path = '../../Orientacao/EEG_Feature_Extraction/201809/Primarios/databases/University_Bonn';
     %Pastas dos subsets
     folders = {'A_Z','B_O','C_N','D_F','E_S'};
-        
+    datasets = [];
+    
     for folder = folders
         %Construindo os caminhos e listando os arquivos de eeg
         full_path = [base_path '/' folder{1} '/'];
         search_pattern = [full_path '*.txt'];
         files = dir(search_pattern);
-        
+        X = [];
         for i=1:length(files)
             %Carregando arquivos
             filename = [full_path files(i).name];
             file = load(filename);
             
             %Imprimindo dados brutos
-            plot_signals(file, files(i).name, folder{1}(1), i, 'Raw');
+            %plot_signals(file, files(i).name, folder{1}(1), i, 'Raw');
+            
+            %Aplicando lowpass-filter em 60Hz
+            %a = (1/173.61)/(1/(2*pi*60));
+            %y = filter(file,60,173.61);
+            %y = filter(a, [1 a-1], file);
+            %plot_signals(y, files(i).name, folder{1}(1), i, 'Lpf');
+            
+            X = [X,file];
         end
+        datasets = cat(3,datasets,X);
     end
     
-    A = 1;
+    m_means = mean(datasets);
+    save all;
+    
+    A = datasets;
     B = 2;
 end
 
