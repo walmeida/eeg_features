@@ -24,27 +24,41 @@ function [A,B] = feature_extraction()
         search_pattern = [full_path '*.txt'];
         files = dir(search_pattern);
         X = [];
+        Y = [];
+        Z = [];
         for i=1:length(files)
             %Carregando arquivos
             filename = [full_path files(i).name];
             file = load(filename);
             
+            %RAW
             %Imprimindo dados brutos
             %plot_signals(file, files(i).name, folder{1}(1), i, 'Raw');
             
+            %LBF
             %Aplicando lowpass-filter em 60Hz
-            %a = (1/173.61)/(1/(2*pi*60));
-            %y = filter(file,60,173.61);
-            %y = filter(a, [1 a-1], file);
-            %plot_signals(y, files(i).name, folder{1}(1), i, 'Lpf');
+            y = lowpassfilter(file, 4, 60, 173.61);
+            %Imprimindo lowpass-filter
+            plot_signals(y, files(i).name, folder{1}(1), i, 'Lpf');
             
-            X = [X,file];
+            %EMD
+            %Aplicando EMD
+            %imfs = emd_old(file, length(file), 173.61);
+            %Imprimindo imfs
+            %for j=1:size(imfs,1)
+            %    imf = imfs(j,:)'; 
+            %    plot_signals(imf, files(i).name, folder{1}(1), i, 'EMD');
+            %end
+            
+            X = [X,file];   %Raw
+            Y = [Y,y];      %Lpf
+            %Z = [Z,z];      %EMD
         end
         datasets = cat(3,datasets,X);
     end
     
-    m_means = mean(datasets);
-    save all;
+    %m_means = mean(datasets);
+    %save all;
     
     A = datasets;
     B = 2;

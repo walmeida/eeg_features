@@ -1,15 +1,21 @@
-% simplpm1.m - matlab main program implementing
-%              the simplest lowpass filter:
-%
-%                    y(n) = x(n)+x(n-1)}
-% https://www.dsprelated.com/freebooks/filters/Matlab_Analysis_Simplest_Lowpass.html
-function [Y] = lowpassfilter(X)
+%****************************************************************
+% lowpassfilter.m
+% Esta função implementa e aplica Buttrworth lowpassfilter
+% Data: 01/04/2019
+% Autor: Wallace Almeida
+%****************************************************************
 
-    %N=length(X);       % length of test
-    %x = 1:N;    % test input signal (integer ramp)
-    B = [1,1];  % transfer function numerator
-    A = 1;      % transfer function denominator
+%****************************************************************
+% Parâmetros:
+% X: sinal - vetor coluna
+% n: ordem do filtro
+% fc: frequência de corte
+% fs: frequência de amostragem
+%****************************************************************
+% https://www.mathworks.com/help/signal/ref/butter.html
 
+function [Y] = lowpassfilter(X, n, fc, fs)
+    Wn = fc/(fs/2);
+    [B, A] = butter(n, Wn, 'low');
     Y = filter(B,A,X);
-butter
 end

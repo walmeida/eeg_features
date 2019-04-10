@@ -36,7 +36,9 @@ function imf = emd(x)
        SD = 1; % Standard deviation which will be used to stop the sifting process
 
        while SD > 0.3
-          % while the standard deviation is higher than 0.3 (typical value)
+           disp('SD:');
+           disp(SD);
+           % while the standard deviation is higher than 0.3 (typical value)
 
           % find local max/min points
           d = diff(h); % approximate derivative
@@ -49,6 +51,8 @@ function imf = emd(x)
              end
           end
 
+          %disp('maxmin:')
+          %disp(maxmin)
           if size(maxmin,2) < 2 % then it is the residue
              break
           end
@@ -84,7 +88,9 @@ function imf = emd(x)
 
        imf = [imf; h]; % store the extracted IMF in the matrix imf
        % if size(maxmin,2)<2, then h is the residue
-
+       
+       %disp('maxmin2:')
+       %disp(maxmin)
        % stop criterion of the algo.
        if size(maxmin,2) < 2
           break
