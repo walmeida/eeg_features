@@ -11,12 +11,13 @@
 % 
 %****************************************************************
 
-function [A,B] = feature_extraction()
+function [X,Y] = feature_extraction()
     %Diretório base dos datasets
     base_path = '../../Orientacao/EEG_Feature_Extraction/201809/Primarios/databases/University_Bonn';
     %Pastas dos subsets
     folders = {'A_Z','B_O','C_N','D_F','E_S'};
-    datasets = [];
+    raw_datasets = [];
+    lpf_datasets = [];
     
     for folder = folders
         %Construindo os caminhos e listando os arquivos de eeg
@@ -25,43 +26,32 @@ function [A,B] = feature_extraction()
         files = dir(search_pattern);
         X = [];
         Y = [];
-        Z = [];
         for i=1:length(files)
             %Carregando arquivos
             filename = [full_path files(i).name];
             file = load(filename);
             
             %RAW
+            x = file;
             %Imprimindo dados brutos
-            %plot_signals(file, files(i).name, folder{1}(1), i, 'Raw');
+            %plot_signals(x, files(i).name, folder{1}(1), i, 'Raw');
             
             %LBF
             %Aplicando lowpass-filter em 60Hz
-            y = lowpassfilter(file, 4, 60, 173.61);
+            y = lowpassfilter(x, 4, 60, 173.61);
             %Imprimindo lowpass-filter
-            plot_signals(y, files(i).name, folder{1}(1), i, 'Lpf');
+            %plot_signals(y, files(i).name, folder{1}(1), i, 'Lpf');
             
-            %EMD
-            %Aplicando EMD
-            %imfs = emd_old(file, length(file), 173.61);
-            %Imprimindo imfs
-            %for j=1:size(imfs,1)
-            %    imf = imfs(j,:)'; 
-            %    plot_signals(imf, files(i).name, folder{1}(1), i, 'EMD');
-            %end
+            X = [X,x];   %Raw
+            Y = [Y,y];   %Lpf
             
-            X = [X,file];   %Raw
-            Y = [Y,y];      %Lpf
-            %Z = [Z,z];      %EMD
         end
-        datasets = cat(3,datasets,X);
+        raw_datasets = cat(3,raw_datasets,X);
+        lpf_datasets = cat(3,lpf_datasets,Y);
     end
-    
-    %m_means = mean(datasets);
-    %save all;
-    
-    A = datasets;
-    B = 2;
+        
+    save('input', 'raw_datasets', 'lpf_datasets');
+ 
 end
 
 function plot_signals(file, filebasename, folder, index, export_type)
