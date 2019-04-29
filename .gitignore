@@ -4,3 +4,6 @@
 *.bbl
 *.blg
 *.gz
+results/
+vendors/
+plots/

@@ -34,13 +34,13 @@ function [X,Y] = feature_extraction()
             %RAW
             x = file;
             %Imprimindo dados brutos
-            %plot_signals(x, files(i).name, folder{1}(1), i, 'Raw');
+            %plot_signals(x, files(i).name, folder{1}(1), 'plots', i, 'Raw', 0);
             
             %LBF
             %Aplicando lowpass-filter em 60Hz
             y = lowpassfilter(x, 4, 60, 173.61);
             %Imprimindo lowpass-filter
-            %plot_signals(y, files(i).name, folder{1}(1), i, 'Lpf');
+            %plot_signals(y, files(i).name, folder{1}(1), 'plots' i, 'Lpf', 0);
             
             X = [X,x];   %Raw
             Y = [Y,y];   %Lpf
@@ -52,16 +52,4 @@ function [X,Y] = feature_extraction()
         
     save('input', 'raw_datasets', 'lpf_datasets');
  
-end
-
-function plot_signals(file, filebasename, folder, index, export_type)
-    f = figure('visible', 'off');
-    plot(1:length(file),file);
-    xlim([0 length(file)])
-    xlabel('Amostra');
-    ylabel('Amplitude (mV)');
-    str_title = [export_type ' EEG - Dataset ' folder ' - Channel ' int2str(index)];
-    title(str_title);
-    saveas(f,['plots/' export_type '/' filebasename '.png']);
-    close(f);
 end
