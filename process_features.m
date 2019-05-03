@@ -11,6 +11,6 @@ function process_features(full_datasets)
     
     %EMD -- https://www.mathworks.com/help/signal/ref/emd.html
     disp('Processando EMD...');
-    m_emd(datasets);
+    m_emd(datasets, 173.61);
    
 end
